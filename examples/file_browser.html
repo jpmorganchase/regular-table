@@ -22,7 +22,17 @@
     <link rel='stylesheet' href="../dist/css/material.css">
 
     <style>
-        .rt-browser-icon:before {
+        :root {
+            --rt-dir-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBjbGFzcz0ianAtaWNvbjMganAtaWNvbi1zZWxlY3RhYmxlIiBmaWxsPSIjNjE2MTYxIiBkPSJNMTAgNEg0Yy0xLjEgMC0xLjk5LjktMS45OSAyTDIgMThjMCAxLjEuOSAyIDIgMmgxNmMxLjEgMCAyLS45IDItMlY4YzAtMS4xLS45LTItMi0yaC04bC0yLTJ6Ii8+PC9zdmc+");
+            --rt-text-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBjbGFzcz0ianAtaWNvbjMganAtaWNvbi1zZWxlY3RhYmxlIiBmaWxsPSIjNjE2MTYxIiBkPSJNMTUgMTVIM3YyaDEydi0yem0wLThIM3YyaDEyVjd6TTMgMTNoMTh2LTJIM3Yyem0wIDhoMTh2LTJIM3Yyek0zIDN2MmgxOFYzSDN6Ii8+PC9zdmc+");
+
+            --rt-caret-left: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBkPSJNMTAuOCAxMi44TDcuMSA5bDMuOC0zLjh2Ny42aC0uMXoiIGZpbGw9IiM2MTYxNjEiIHNoYXBlLXJlbmRlcmluZz0iZ2VvbWV0cmljUHJlY2lzaW9uIi8+PC9zdmc+");
+            --rt-caret-up: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBkPSJNNS4yIDEwLjVMOSA2LjhsMy44IDMuOEg1LjJ6IiBmaWxsPSIjNjE2MTYxIiBzaGFwZS1yZW5kZXJpbmc9Imdlb21ldHJpY1ByZWNpc2lvbiIvPjwvc3ZnPg==");
+            --rt-caret-right: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBkPSJNNy4yIDUuMkwxMC45IDlsLTMuOCAzLjhWNS4yaC4xeiIgZmlsbD0iIzYxNjE2MSIgc2hhcGUtcmVuZGVyaW5nPSJnZW9tZXRyaWNQcmVjaXNpb24iLz48L3N2Zz4=");
+            --rt-caret-down: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBkPSJNNS4yIDcuNUw5IDExLjJsMy44LTMuOEg1LjJ6IiBmaWxsPSIjNjE2MTYxIiBzaGFwZS1yZW5kZXJpbmc9Imdlb21ldHJpY1ByZWNpc2lvbiIvPjwvc3ZnPg==");
+        }
+
+        .rt-browser-filetype-icon:before {
             content: "";
             float: left;
             margin-right: 5px;
@@ -32,11 +42,28 @@
         }
 
         .rt-browser-dir-icon:before {
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBjbGFzcz0ianAtaWNvbjMganAtaWNvbi1zZWxlY3RhYmxlIiBmaWxsPSIjNjE2MTYxIiBkPSJNMTAgNEg0Yy0xLjEgMC0xLjk5LjktMS45OSAyTDIgMThjMCAxLjEuOSAyIDIgMmgxNmMxLjEgMCAyLS45IDItMlY4YzAtMS4xLS45LTItMi0yaC04bC0yLTJ6Ii8+PC9zdmc+");
+            background-image: var(--rt-dir-icon);
         }
 
         .rt-browser-text-icon:before {
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBjbGFzcz0ianAtaWNvbjMganAtaWNvbi1zZWxlY3RhYmxlIiBmaWxsPSIjNjE2MTYxIiBkPSJNMTUgMTVIM3YyaDEydi0yem0wLThIM3YyaDEyVjd6TTMgMTNoMTh2LTJIM3Yyem0wIDhoMTh2LTJIM3Yyek0zIDN2MmgxOFYzSDN6Ii8+PC9zdmc+");
+            background-image: var(--rt-text-icon);
+        }
+
+        thead th span:first-child {
+            background-position: right;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            min-width: 16px;
+            min-height: 16px;
+            padding-right: 16px;
+        }
+
+        thead th.rt-sort-asc span:first-child {
+            background-image: var(--rt-caret-up);
+        }
+
+        thead th.rt-sort-desc span:first-child {
+            background-image: var(--rt-caret-down);
         }
 
         table {
@@ -86,17 +113,20 @@
 
         function getFileSystemContents(path, expand) {
             // infinite recursive mock contents
+            const key = path.join("");
+
             let contents;
-            if (CONTENTS_CACHE.has(path)) {
-                contents = CONTENTS_CACHE.get(path);
+            if (CONTENTS_CACHE.has(key)) {
+                contents = CONTENTS_CACHE.get(key);
             } else {
                 contents = {
                     path,
+                    is_open: false,
                     modified: new Date(12 * 60 * 60 * 1000),
                     kind: "dir",
                     writable: false,
                 };
-                CONTENTS_CACHE.set(path, contents);
+                CONTENTS_CACHE.set(key, contents);
             }
 
             if (!expand || "contents" in contents) {
@@ -112,7 +142,7 @@
                     writable: false,
                 };
 
-                CONTENTS_CACHE.set(subcontents.path, subcontents);
+                CONTENTS_CACHE.set(subcontents.path.join(""), subcontents);
                 contents.contents.push(subcontents);
             }
 
@@ -123,15 +153,107 @@
     </script>
 
     <script>
+        const SORT_DIRS = ["asc", "desc", null];
+
+        function contentsSorterClosure(sort) {
+            // map sort direction string onto sort direction sign
+            const signs = sort.map(([col, dir]) => [col, dir.startsWith("desc") ? -1 : 1]);
+
+            return function contentsSorter(lrow, rrow) {
+                for (const [col, sign] of signs) {
+                    let cmp;
+                    let lval = lrow[col];
+                    let rval = rrow[col];
+
+                    if (Array.isArray(lval)) {
+                        lval = lval[lval.length - 1];
+                        rval = rval[rval.length - 1];
+                    }
+
+                    if (typeof lval === "string") {
+                        cmp = lval.localeCompare(rval);
+                    } else {
+                        cmp = lval - rval;
+                    }
+
+                    if (cmp) {
+                        return sign * cmp;
+                    }
+                }
+                return 0;
+            };
+        }
+
+        function updateSort(sort, column_name, multi) {
+            const current_idx = sort.findIndex((x) => x[0] === column_name);
+            if (current_idx > -1) {
+                const old_dir = sort[current_idx][1];
+                const sort_dir = SORT_DIRS[(SORT_DIRS.indexOf(old_dir) + 1) % SORT_DIRS.length];
+                if (sort_dir) {
+                    // update the sort_dir
+                    sort[current_idx] = [column_name, sort_dir];
+                } else {
+                    // remove this column from the sort
+                    sort.splice(current_idx, 1);
+                }
+            } else {
+                const new_sort = [column_name, SORT_DIRS[0]];
+                if (multi) {
+                    sort.push(new_sort);
+                } else {
+                    sort = [new_sort];
+                }
+            }
+
+            return sort;
+        }
+
+        function _flattenContents(contents, sorter, contents_list) {
+            if (!contents) {
+                // bail
+                return contents_list;
+            }
+
+            for (const subcontents of sorter ? contents.contents?.sort(sorter) : contents.contents) {
+                contents_list.push(subcontents);
+                if (subcontents.is_open) {
+                    _flattenContents(subcontents, sorter, contents_list);
+                }
+            }
+
+            return contents_list;
+        }
+
+        function getSortedContents(root, sort, expand, column_name, multi) {
+            // update sort orders, if requested
+            if (column_name) {
+                sort = updateSort(sort, column_name, multi);
+
+                // if sort is empty, use a default sort
+                sort = sort.length > 0 ? sort : [["path", "asc"]];
+            }
+
+            const sorter = contentsSorterClosure(sort);
+
+            // get contents, then sort/flatten and return them
+            const contents = window.getFileSystemContents(root, expand);
+            return [_flattenContents(contents, sorter, []), sort];
+        }
+
+        window.getSortedContents = getSortedContents;
+    </script>
+
+    <script>
         const COLUMN_HEADERS = ["modified", "kind", "writable"];
-
         const DATE_FORMATTER = new Intl.DateTimeFormat("en-us");
-        const TEMPLATE = document.createElement("template");
-        const VIEW_STATE = window.getFileSystemContents([], true).contents;
-
+        let ROOT = [];
         const TABLE = document.getElementsByTagName("regular-table")[0];
+        const TEMPLATE = document.createElement("template");
 
-        // Splice out the contents of the collapsed node and any expanded subnodes
+        // set initial sort while also creating the root contents
+        let [VIEW_STATE, SORT] = window.getSortedContents(ROOT, [["path", "asc"]], true);
+
+        // splice out the contents of the collapsed node and any expanded subnodes
         async function collapse(rix) {
             VIEW_STATE[rix].is_open = false;
             const contents = window.getFileSystemContents(VIEW_STATE[rix].path);
@@ -146,8 +268,9 @@
 
         async function expand(rix) {
             VIEW_STATE[rix].is_open = true;
-            const contents = window.getFileSystemContents(VIEW_STATE[rix].path, true);
-            VIEW_STATE.splice(rix + 1, 0, ...contents.contents);
+
+            const [contents_list] = window.getSortedContents(VIEW_STATE[rix].path, SORT, true);
+            VIEW_STATE.splice(rix + 1, 0, ...contents_list);
         }
 
         function tree_header_levels(path, is_open, is_leaf) {
@@ -191,6 +314,14 @@
         }
 
         function file_browser_style() {
+            // style the column header sort carets
+            const sort_obj = Object.fromEntries(SORT);
+            for (const th of TABLE.get_ths()) {
+                const sort_dir = sort_obj[th.firstElementChild.textContent || "path"];
+                th.className = sort_dir ? `rt-sort-${sort_dir}` : "";
+            }
+
+            // style the browser's filetype icons
             const trs = TABLE.querySelectorAll("tr");
             for (const tr of trs) {
                 const {children} = tr;
@@ -198,19 +329,28 @@
                 for (let i = 1; i < children.length; i++) {
                     const text = children[i].textContent;
                     if (text === "dir") {
-                        row_name_node.classList.add("rt-browser-icon", "rt-browser-dir-icon");
+                        row_name_node.classList.add("rt-browser-filetype-icon", "rt-browser-dir-icon");
                         break;
                     } else if (text === "text") {
-                        row_name_node.classList.add("rt-browser-icon", "rt-browser-text-icon");
+                        row_name_node.classList.add("rt-browser-filetype-icon", "rt-browser-text-icon");
                         break;
                     }
                 }
             }
         }
 
-        function file_browser_on_click(event) {
+        function file_browser_on_sort_click(event, tx_element, metadata) {
+            if (metadata?.is_column_header) {
+                const column_name = metadata.column_name || "path";
+                const multi = event.shiftKey;
+
+                [VIEW_STATE, SORT] = window.getSortedContents(ROOT, SORT, false, column_name, multi);
+                TABLE.draw({invalid_viewport: true});
+            }
+        }
+
+        function file_browser_on_tree_click(event, tx_element, metadata) {
             if (event.target.tagName === "SPAN" && event.target.className === "pd-row-header-icon") {
-                const metadata = TABLE.getMeta(event.target.parentElement.parentElement);
                 if (VIEW_STATE[metadata.y].is_open) {
                     collapse(metadata.y);
                 } else {
@@ -222,8 +362,9 @@
 
         window.addEventListener("DOMContentLoaded", async function () {
             TABLE.setDataListener(file_browser_model);
+            TABLE.addClickListener(file_browser_on_sort_click);
+            TABLE.addClickListener(file_browser_on_tree_click);
             TABLE.addStyleListener(file_browser_style);
-            TABLE.addEventListener("click", file_browser_on_click);
             await TABLE.draw();
         });
     </script>

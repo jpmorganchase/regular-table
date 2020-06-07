@@ -33,6 +33,7 @@ class RegularTableElement extends RegularViewEventModel {
         this.register_listeners();
         this.setAttribute("tabindex", "0");
         this._column_sizes = {auto: {}, override: {}, indices: []};
+        this._click_callbacks = new Map();
         this._style_callbacks = new Map();
         this.table_model = new RegularTableViewModel(this._table_clip, this._column_sizes, this._sticky_container);
         if (!this.table_model) return;
@@ -65,6 +66,12 @@ class RegularTableElement extends RegularViewEventModel {
         this.scrollTop = 0;
         this.scrollLeft = 0;
         this.reset_viewport();
+    }
+
+    addClickListener(clickListener) {
+        const key = this._click_callbacks.size;
+        this._click_callbacks.set(key, clickListener);
+        return key;
     }
 
     addStyleListener(styleListener) {

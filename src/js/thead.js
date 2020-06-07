@@ -23,7 +23,6 @@ export class RegularHeaderViewModel extends ViewModel {
     _draw_group_th(offset_cache, d, column, sort_dir) {
         const th = this._get_cell("TH", d, offset_cache[d]);
         offset_cache[d] += 1;
-        th.className = "";
         th.removeAttribute("colspan");
         th.style.minWidth = "0";
         if (sort_dir?.length === 0) {
@@ -63,7 +62,6 @@ export class RegularHeaderViewModel extends ViewModel {
         metadata.column_path = column;
         metadata.column_name = column_name;
         metadata.is_column_header = false;
-        th.className = "";
         return metadata;
     }
 

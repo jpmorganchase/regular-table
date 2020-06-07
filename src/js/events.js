@@ -121,6 +121,11 @@ export class RegularViewEventModel extends RegularVirtualTableViewModel {
         const metadata = METADATA_MAP.get(element);
         if (is_resize) {
             this._on_resize_column(event, element, metadata);
+        } else {
+            // skip callbacks if this is a resize event
+            for (const callback of this._click_callbacks.values()) {
+                await callback(event, element, metadata);
+            }
         }
     }
 
