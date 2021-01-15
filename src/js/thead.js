@@ -25,11 +25,7 @@ export class RegularHeaderViewModel extends ViewModel {
         th.className = "";
         th.removeAttribute("colspan");
         th.style.minWidth = "0";
-        th.innerHTML = html`
-            ${column}
-            <span class="pd-column-resize"></span>
-        `;
-
+        th.textContent = column;
         return th;
     }
 
