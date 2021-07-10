@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/regular-table@0.0.6/dist/umd/regular-table.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+<!-- 
+    <div style="height: 500px; width: 500 px;">
+        <regular-table></regular-table>
+    </div> -->
+    <iframe sandbox="allow-same-origin allow-scripts" src="./file_browser.html" height="1000" width="1000"></iframe>
+
+    <script>
+        function myFunction(){
+            var iframe = document.getElementsByTagName("iframe")[0];
+            iframe.contentWindow.postMessage(document.getElementById("myInput").value, "*");
+        }
+    </script>
+</body>
+</html>

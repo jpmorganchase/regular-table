@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <script src="https://cdn.jsdelivr.net/npm/regular-table@0.0.6/dist/umd/regular-table.js"></script>
+    <link rel='stylesheet' href="https://cdn.jsdelivr.net/npm/regular-table@0.0.6/dist/css/material.css">
+
+    <style>
+        .rt-browser-icon:before {
+            content: "";
+            float: left;
+            margin-right: 5px;
+            margin-left: -10px;
+            min-width: 16px;
+            min-height: 16px;
+        }
+
+        .rt-browser-dir-icon:before {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBjbGFzcz0ianAtaWNvbjMganAtaWNvbi1zZWxlY3RhYmxlIiBmaWxsPSIjNjE2MTYxIiBkPSJNMTAgNEg0Yy0xLjEgMC0xLjk5LjktMS45OSAyTDIgMThjMCAxLjEuOSAyIDIgMmgxNmMxLjEgMCAyLS45IDItMlY4YzAtMS4xLS45LTItMi0yaC04bC0yLTJ6Ii8+PC9zdmc+");
+        }
+
+        .rt-browser-text-icon:before {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBjbGFzcz0ianAtaWNvbjMganAtaWNvbi1zZWxlY3RhYmxlIiBmaWxsPSIjNjE2MTYxIiBkPSJNMTUgMTVIM3YyaDEydi0yem0wLThIM3YyaDEyVjd6TTMgMTNoMTh2LTJIM3Yyem0wIDhoMTh2LTJIM3Yyek0zIDN2MmgxOFYzSDN6Ii8+PC9zdmc+");
+        }
+
+        table {
+            cursor: default;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <regular-table></regular-table>
+
+    <script>
+        const NUM_ROWS = 100;
+        const NUM_DIR = 10;
+
+        const DIR_NAMES = [
+            "able",
+            "baker",
+            "charlie",
+            "dog",
+            "easy",
+            "fox",
+            "george",
+            "how",
+            "item",
+            "jig",
+            "king",
+            "love",
+            "mike",
+            "nan",
+            "oboe",
+            "peter",
+            "queen",
+            "roger",
+            "sugar",
+            "tare",
+            "uncle",
+            "victor",
+            "william",
+            "xray",
+            "yoke",
+            "zebra",
+        ];
+
+        const CONTENTS_CACHE = new Map();
+
+        function getFileSystemContents(path, expand) {
+            // infinite recursive mock contents
+            let contents;
+            if (CONTENTS_CACHE.has(path)) {
+                contents = CONTENTS_CACHE.get(path);
+            } else {
+                contents = {
+                    path,
+                    modified: new Date(12 * 60 * 60 * 1000),
+                    kind: "dir",
+                    writable: false,
+                };
+                CONTENTS_CACHE.set(path, contents);
+            }
+
+            if (!expand || "contents" in contents) {
+                return contents;
+            }
+
+            contents.contents = [];
+            for (let i = 0; i < NUM_ROWS; i++) {
+                const subcontents = {
+                    path: [...path, i < NUM_DIR ? `${DIR_NAMES[i]}/` : `file_${i - NUM_DIR}.txt`],
+                    modified: new Date(contents.modified.getTime() + 24 * 60 * 60 * 1000 * (365 + i)),
+                    kind: i < NUM_DIR ? "dir" : "text",
+                    writable: false,
+                };
+
+                CONTENTS_CACHE.set(subcontents.path, subcontents);
+                contents.contents.push(subcontents);
+            }
+
+            return contents;
+        }
+
+        window.getFileSystemContents = getFileSystemContents;
+    </script>
+
+    <script>
+        const COLUMN_HEADERS = ["modified", "kind", "writable"];
+
+        const DATE_FORMATTER = new Intl.DateTimeFormat("en-us");
+        const TEMPLATE = document.createElement("template");
+        const VIEW_STATE = window.getFileSystemContents([], true).contents;
+
+        const TABLE = document.getElementsByTagName("regular-table")[0];
+
+        // Splice out the contents of the collapsed node and any expanded subnodes
+        async function collapse(rix) {
+            VIEW_STATE[rix].is_open = false;
+            const contents = window.getFileSystemContents(VIEW_STATE[rix].path);
+            let npop = contents.contents.length;
+            let check_ix = rix + 1 + npop;
+            while (VIEW_STATE[check_ix++].path.length > contents.path.length) {
+                npop++;
+            }
+
+            VIEW_STATE.splice(rix + 1, npop);
+        }
+
+        async function expand(rix) {
+            VIEW_STATE[rix].is_open = true;
+            const contents = window.getFileSystemContents(VIEW_STATE[rix].path, true);
+            VIEW_STATE.splice(rix + 1, 0, ...contents.contents);
+        }
+
+        function tree_header_levels(path, is_open, is_leaf) {
+            const tree_levels = path.slice(1).map(() => '<span class="pd-tree-group"></span>');
+            if (!is_leaf) {
+                const group_icon = is_open ? "remove" : "add";
+                const tree_button = `<span class="pd-row-header-icon">${group_icon} </span>`;
+                tree_levels.push(tree_button);
+            }
+
+            return tree_levels.join("");
+        }
+
+        function tree_header({path, is_open, kind}) {
+            const name = path.length === 0 ? "TOTAL" : path[path.length - 1];
+            const header_classes = kind === "text" ? "pd-group-name pd-group-leaf" : "pd-group-name";
+            const tree_levels = tree_header_levels(path, is_open, kind === "text");
+            const header_text = name;
+            TEMPLATE.innerHTML = `<span class="pd-tree-container">${tree_levels}<span class="${header_classes}">${header_text}</span></span>`;
+            return TEMPLATE.content.firstChild;
+        }
+
+        async function file_browser_model(start_col, start_row, end_col, end_row) {
+            const data = [];
+            for (let cix = start_col; cix < end_col; cix++) {
+                const name = COLUMN_HEADERS[cix];
+                data.push(
+                    VIEW_STATE.slice(start_row, end_row).map((c) => {
+                        return name === "modified" ? DATE_FORMATTER.format(c[name]) : c[name];
+                    })
+                );
+            }
+
+            return {
+                num_rows: VIEW_STATE.length,
+                num_columns: COLUMN_HEADERS.length,
+                column_headers: COLUMN_HEADERS.map((col) => [col]),
+                row_headers: VIEW_STATE.slice(start_row, end_row).map((x) => [tree_header(x)]),
+                data,
+            };
+        }
+
+        function file_browser_style() {
+            const trs = TABLE.querySelectorAll("tr");
+            for (const tr of trs) {
+                const {children} = tr;
+                const row_name_node = children[0].querySelector(".pd-group-name");
+                for (let i = 1; i < children.length; i++) {
+                    const text = children[i].textContent;
+                    if (text === "dir") {
+                        row_name_node.classList.add("rt-browser-icon", "rt-browser-dir-icon");
+                        break;
+                    } else if (text === "text") {
+                        row_name_node.classList.add("rt-browser-icon", "rt-browser-text-icon");
+                        break;
+                    }
+                }
+            }
+        }
+
+        function file_browser_on_click(event) {
+            if (event.target.tagName === "SPAN" && event.target.className === "pd-row-header-icon") {
+                const metadata = TABLE.getMeta(event.target.parentElement.parentElement);
+                if (VIEW_STATE[metadata.y].is_open) {
+                    collapse(metadata.y);
+                } else {
+                    expand(metadata.y);
+                }
+                TABLE.draw();
+            }
+        }
+
+        function file_browser_on_search(event) {
+            var filter, tr, td, i, txtValue, th, tempD, temptd;
+            tr = document.getElementsByTagName("tr");
+            filter = event.data;
+            for (i = 1; i < tr.length; i++) {
+                th = tr[i].getElementsByTagName("th")[0];
+                tempD = th.getElementsByTagName("span")[0];
+                temptd = tempD.getElementsByTagName("span");
+                if (temptd.length == 1) {
+                    td = temptd[0];
+                } else {
+                    td = temptd[1];
+                }
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", async function () {
+            TABLE.setDataListener(file_browser_model);
+            TABLE.addStyleListener(file_browser_style);
+            TABLE.addEventListener("click", file_browser_on_click);
+            await TABLE.draw();
+        });
+
+        window.addEventListener("message", file_browser_on_search);
+</script>
+
+</body>
+
+</html>
